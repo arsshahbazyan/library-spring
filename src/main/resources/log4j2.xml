@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="ChangesLogs">
+	<Appenders>
+		
+		<Console name="consoleAppender" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d | %level | %logger | %m%n" />
+		</Console>
+		
+		<JDBC name="userAppenderDB" tableName="user_logs">
+			<ConnectionFactory class="com.epam.learning.library.config.LogsConnectionFactory" method="getDatabaseConnection" />
+			<Column name="level" pattern="%level"/>
+			<Column name="user_id" pattern="%X{user_id}"/>
+			<Column name="field" pattern="%X{field}"/>
+			<Column name="from_value" pattern="%X{from_value}"/>
+			<Column name="to_value" pattern="%X{to_value}"/>
+			<Column name="message" pattern="%message"/>
+			<Column name="changed_by_username" pattern="%X{changed_by_username}"/>
+		</JDBC>
+		
+		<JDBC name="libraryAppenderDB" tableName="library_logs">
+			<ConnectionFactory class="com.epam.learning.library.config.LogsConnectionFactory" method="getDatabaseConnection" />
+			<Column name="level" pattern="%level"/>
+			<Column name="message" pattern="%message"/>
+			<Column name="book_id" pattern="%X{book_id}"/>
+			<Column name="user_id" pattern="%X{user_id}"/>
+			<Column name="changed_by_username" pattern="%X{changed_by_username}"/>
+		</JDBC>
+	</Appenders>
+
+	<Loggers>
+		<Root level="error">
+			<AppenderRef ref="consoleAppender" />
+		</Root>
+	
+		<Logger name="userLoggerDB" level="info">
+			<AppenderRef ref="userAppenderDB" />
+		</Logger>
+		
+		<Logger name="libraryLoggerDB" level="info">
+			<AppenderRef ref="libraryAppenderDB" />
+		</Logger>
+		
+	</Loggers>
+
+</Configuration>
